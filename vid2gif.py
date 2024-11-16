@@ -2,27 +2,13 @@ import os
 import sys
 import ffmpeg
 
-def validate_inputs(file_path, start_time, end_time):
-    """Validates the input parameters."""
+def validate_inputs(file_path):
+    """Validates the video file."""
     if not os.path.isfile(file_path):
         print(f"Error: The file '{file_path}' does not exist.")
         sys.exit(1)
 
-    if not start_time.isdigit() or not end_time.isdigit():
-        print("Error: Start time and end time must be positive integers.")
-        sys.exit(1)
-
-    start_time = int(start_time)
-    end_time = int(end_time)
-
-    if start_time < 0 or end_time < 0:
-        print("Error: Times must be non-negative.")
-        sys.exit(1)
-
-    return start_time, end_time
-
-
-def trim_video(file_path, start_time, end_time):
+def trim_video(file_path, start_time=0, end_time=0):
     """Trims the video based on the specified times."""
     output_path = os.path.splitext(file_path)[0] + "_trimmed.mp4"
     
@@ -49,7 +35,7 @@ def trim_video(file_path, start_time, end_time):
 
 
 def convert_to_gif(video_path):
-    """Converts a trimmed video to GIF."""
+    """Converts a video to GIF."""
     output_path = os.path.splitext(video_path)[0] + ".gif"
     
     try:
@@ -63,19 +49,24 @@ def convert_to_gif(video_path):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 4:
-        print("Usage: python vid2gif.py <video_path> <start_seconds> <end_seconds>")
+    if len(sys.argv) < 2 or len(sys.argv) > 4:
+        print("Usage: python vid2gif.py <video_path> [<start_seconds> <end_seconds>]")
         sys.exit(1)
 
     video_path = sys.argv[1]
-    start_seconds = sys.argv[2]
-    end_seconds = sys.argv[3]
+    start_seconds = int(sys.argv[2]) if len(sys.argv) > 2 else 0
+    end_seconds = int(sys.argv[3]) if len(sys.argv) > 3 else 0
 
-    # Validate inputs
-    start_seconds, end_seconds = validate_inputs(video_path, start_seconds, end_seconds)
+    # Validate video file
+    validate_inputs(video_path)
 
-    # Trim video
-    trimmed_video = trim_video(video_path, start_seconds, end_seconds)
+    if start_seconds > 0 or end_seconds > 0:
+        # Trim video if times are provided
+        trimmed_video = trim_video(video_path, start_seconds, end_seconds)
+    else:
+        # Use the original video if no times are provided
+        trimmed_video = video_path
 
     # Convert to GIF
     convert_to_gif(trimmed_video)
+

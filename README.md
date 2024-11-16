@@ -23,14 +23,19 @@ Vid2Gif is a command-line tool designed to convert video files into GIFs, offeri
 ## Usage
 Run the script with the following syntax:
     ```bash
-    python vid2gif.py <video_path> <start_seconds> <end_seconds>
+    python vid2gif.py <video_path> [<start_seconds> <end_seconds>]
     ```
 - `<video_path>`: Path to the video file (supports common formats like MP4, MKV, AVI, etc.).
-- `<start_seconds>`: Number of seconds to trim from the start of the video.
-- `<end_seconds>`: Number of seconds to trim from the end of the video.
+- `<start_seconds>`: (Optional) Number of seconds to trim from the start of the video.
+- `<end_seconds>`: (Optional) Number of seconds to trim from the end of the video.
 <br><br>
 
-### Example
+### Examples
+1. Convert a video to a GIF without trimming:
+```bash
+python vid2gif.py myvideo.mp4
+```
+2. Convert a video to a GIF, trimming 5 seconds from the start and 10 seconds from the end:
 ```bash
 python vid2gif.py myvideo.mp4 5 10
 ```
